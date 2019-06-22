@@ -1,6 +1,9 @@
 
 use crate::game::Game;
 use crate::game_move::Move;
+use crate::your_game::state::Piece;
+use crate::your_game::MoveType;
+use hdk::holochain_core_types::cas::content::Address;
 use super::{
     GameState,
 };
@@ -21,8 +24,66 @@ use super::{
 
 
 impl Move {
-    pub fn is_valid(&self, _game: Game, _game_state: GameState) -> Result<(), String> {
+    pub fn is_valid(&self, game: Game, game_state: GameState) -> Result<(), String> {
         // <<DEVCAMP-TODO>> Check if a move is valid given the current game and its state
-        Ok(())
+        is_players_turn(self.author.clone(), &game, &game_state)?; // will early return with error
+        match self.move_type {
+            MoveType::Place{x, y} => {
+                let pos = Piece{x, y};
+                pos.is_in_bounds()?;
+                pos.is_empty(&game_state)?;
+                Ok(()) // if we made it this far success!
+            }
+        }
+    }
+}
+
+// another helper for checking if it is the players turn
+
+fn is_players_turn(player: Address, game: &Game, game_state: &GameState) -> Result<(), String> {
+    let moves = &game_state.moves;
+    match moves.last() {
+        Some(last_move) => {
+            if last_move.author == player {
+                Err("it is not this players turn".into())
+            } else {
+                Ok(())
+            }
+        },
+        None => { // also need to handle the case where no moves have been made yet
+            if game.player_2 == player {
+                Ok(()) // player 2 can go first by convention
+            } else {
+                Err("Player 2 must make the first move".into())
+            }
+        }
+    }
+}
+
+// lets add some helper functions for Piece
+
+impl PartialEq for Piece {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
+}
+
+const BOARD_SIZE: usize = 3;
+
+impl Piece {
+    pub fn is_in_bounds(&self) -> Result<(), String> {
+        if self.x < BOARD_SIZE && self.y < BOARD_SIZE {
+            Ok(())
+        } else {
+            Err("Piece is not in bounds".into())
+        }
+    }
+
+    pub fn is_empty(&self, game_state: &GameState) -> Result<(), String> {
+        if game_state.player_1_moves.contains(self) || game_state.player_2_moves.contains(self) {
+            Err("Location is not empty".into())
+        } else {
+            Ok(())
+        }
     }
 }

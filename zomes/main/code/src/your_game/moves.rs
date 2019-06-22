@@ -12,7 +12,7 @@ use hdk::holochain_core_types::{
 
 #[derive(Clone, Debug, Serialize, Deserialize, DefaultJson, PartialEq)]
 pub enum MoveType {
-    // <<DEVCAMP-TODO>> YOUR MOVE ENUM VARIENTS HERE
+    Place {x: usize, y: usize }
 }
 
 impl MoveType {
