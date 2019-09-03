@@ -10,6 +10,12 @@ use hdk::holochain_json_api::{
  */
 
 #[derive(Clone, Debug, Serialize, Deserialize, DefaultJson, PartialEq)]
+pub struct Piece {
+     x: u32,
+     y: u32,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, DefaultJson, PartialEq)]
 pub enum MoveType {
     /**
      * DEVCAMP TODO #1: 
@@ -17,18 +23,24 @@ pub enum MoveType {
      * 
      * Hint: Enum variants can be structs, and thus have parameters
      * References: https://doc.rust-lang.org/rust-by-example/custom_types/enum.html
+     * Examples: 
+     *     RollDice { number: u32 }
+     *     GuessMovie(String)
      */
+    MovePiece { from: Piece, to: Piece },
+    Resign
 }
 
 impl MoveType {
 	pub fn describe() -> Vec<MoveType> {
         /**
          * DEVCAMP TODO #2:
-         * Return a list containing each one of the MoveType enum variantss
+         * Return a list containing each one of the MoveType enum variants
          * This is only a helper list function for the CLI to be able to output the list of possible moves
          * 
          * Hint: use the vec![] macro
-         * References: 
+         * References: https://doc.rust-lang.org/1.3.0/std/macro.vec!.html
          */
+        vec![MoveType::MovePiece { from: Piece { x: 0, y: 0 }, to: Piece { x: 0, y: 0 } }, MoveType::Resign]
 	}
 }
