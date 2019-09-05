@@ -221,5 +221,40 @@ impl GameState {
          *     to help transform your game state into an easier format for this function to read
          * References: 
          */
+        
+        
+
+
+        match next_move.move_type {
+
+        }
+          
     }
+}
+
+
+pub fn board_sparse_to_dense(state: &GameState)-> [[u8; 8]; 8] {
+    let mut board = [[0u8; 8]; 8];
+    state.player_1.pieces.iter().for_each(|piece| {
+        board[piece.x][piece.y] = 1;
+    });
+    state.player_2.pieces.iter().for_each(|piece| {
+        board[piece.x][piece.y] = 2;
+    });
+    board
+}
+
+pub fn board_dense_to_sparse(board: [[u8; 8]; 8]) -> (Vec<Piece>, Vec<Piece>) {
+    let mut player_1_pieces = Vec::new();
+    let mut player_2_pieces = Vec::new();
+    board.iter().enumerate().for_each(|(x, row)| {
+        row.iter().enumerate().for_each(|(y, square)| {
+            if *square == 1 {
+                player_1_pieces.push(Piece{x , y});
+            } else if *square == 2 {
+                player_2_pieces.push(Piece{x , y});               
+            }
+        })
+    });
+    (player_1_pieces, player_2_pieces)
 }
