@@ -12,7 +12,7 @@ struct Cli {
 	/// This is the instance ID in the conductor that is running the game on the given port (e.g gameInstance)
 	instance: String,
 	/// Url to connect to the running conductor HTTP port (default: http://localhost:3000)
-    #[structopt(default_value = "http://localhost:3000")]
+    // #[structopt(default_value = "http://localhost:3000")]
     url: reqwest::Url,
 }
 

@@ -1,7 +1,7 @@
 [[dnas]]
 id = "game-dna"
 file = "./dist/generic-game.dna.json"
-hash = "QmUnxGv8p8PG71AWh88sNztxndyKK9WUiy94S29RU7jhg7"
+hash = "QmUcRWVHHjY7eLJB15ZuxKYyNB51XXCHq8bH37TUQfZLdm"
 
 
 [[agents]]
@@ -38,8 +38,15 @@ path = "tmp-storage"
 id = "http-interface1"
 [interfaces.driver]
 type = "http"
-port = 3000
+port = 3001
 [[interfaces.instances]]
 id = "instance1"
+
+[[interfaces]]
+id = "http-interface2"
+[interfaces.driver]
+type = "http"
+port = 3002
 [[interfaces.instances]]
 id = "instance2"
+

@@ -35,11 +35,14 @@ use hdk::{
 //     MoveType,
 // };
 
-mod checkers;
-pub use checkers::{
-    GameState,
-    MoveType,
-};
+// mod checkers;
+// pub use checkers::{
+//     GameState,
+//     MoveType,
+// };
+
+mod your_game;
+use your_game::{GameState, MoveType};
 
 mod game;
 mod game_move;
@@ -181,7 +184,8 @@ pub mod main {
 
     #[zome_fn("hc_public")]
     fn render_state(game_address: Address) -> ZomeApiResult<String> {
-        Ok(game::get_state(&game_address)?.render())
+        let game = game::get_game(&game_address).unwrap();
+        Ok(game::get_state(&game_address)?.render(&game))
     }
 
     #[zome_fn("hc_public")]
